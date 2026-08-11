@@ -48,7 +48,12 @@ Over-granting capabilities (`internetClient` + broad `readablePaths`) weakens is
 
 ### Installer supply chain
 
-Running a malicious installer in the sandbox still writes to granted paths. Only install from trusted sources. After install, tighten write access if the game does not self-update.
+The install report is footprint monitoring, not malware detection; an empty
+report does not establish that an installer is safe. Installers that elevate or
+spawn external processes may also escape the monitored process tree. Only
+install from trusted sources, and evaluate unknown software in a disposable
+Windows VM or Windows Sandbox. After install, tighten write access if the game
+does not self-update. See [MALWARE_SCANNING.md](MALWARE_SCANNING.md).
 
 ### Sandbox escapes
 

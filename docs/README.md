@@ -34,6 +34,7 @@ GameCrate runs Windows games inside a Less-Privileged AppContainer (LPAC) with e
 |---|---|
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Isolation stack, components, lifecycle |
 | [THREAT_MODEL.md](THREAT_MODEL.md) | Assets, controls, residual risks |
+| [MALWARE_SCANNING.md](MALWARE_SCANNING.md) | Why ISO/VT/capa scanning is shelved; security boundary |
 | [VIRTUAL_STORAGE.md](VIRTUAL_STORAGE.md) | AppData redirect, registry scanning, teardown |
 
 ## Related files
