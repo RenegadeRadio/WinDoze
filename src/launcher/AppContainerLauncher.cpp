@@ -2,6 +2,7 @@
 
 #include "gamecrate/Win32Error.hpp"
 
+#include <algorithm>
 #include <sstream>
 
 namespace gamecrate {
@@ -27,6 +28,10 @@ void FreeSidArray(PSID* sids, ULONG count) {
 }
 
 }  // namespace
+
+bool AppContainerLauncher::HasBalancedQuotes(const std::wstring& arguments) {
+    return std::count(arguments.begin(), arguments.end(), L'"') % 2 == 0;
+}
 
 bool AppContainerLauncher::ResolveCapability(const std::wstring& name, CapabilitySid& out) {
     out.reset();

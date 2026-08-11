@@ -256,6 +256,11 @@ int LaunchProfile(int argc, wchar_t** argv) {
 
     gamecrate::InstallManager::ApplyVirtualStorage(profile);
 
+    if (!gamecrate::AppContainerLauncher::HasBalancedQuotes(profile.arguments)) {
+        gamecrate::WriteStderr(L"Profile arguments have an unterminated quote.\n");
+        return 1;
+    }
+
     if (!gamecrate::InstallManager::ApplyProfileAcls(profile, gamecrate::AclMode::Run)) {
         gamecrate::WriteStderr(L"Warning: ACL grants may be incomplete.\n");
     }

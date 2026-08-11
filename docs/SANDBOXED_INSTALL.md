@@ -65,6 +65,8 @@ The installer runs as a **monitored child process** (not LPAC). Approve **UAC** 
 
 GameCrate auto-passes `/DIR="<install-dir>"` to Inno-compatible installers when you do not set `--installer-args`.
 
+`--installer-args` is a trusted-caller interface. GameCrate forwards its value as an opaque command-line string; it does not parse or escape individual arguments, though it rejects an unterminated quote. Callers must correctly quote and escape any operator-supplied values, such as a destination path, before interpolating them into this string.
+
 ### 4. Post-install analysis
 
 - Lists new/modified files under allowed roots
@@ -81,7 +83,7 @@ By default, install dir ACLs are tightened to **read/execute** after a successfu
 
 | Flag | Default | Purpose |
 |---|---|---|
-| `--installer-args` | empty | Arguments for the installer |
+| `--installer-args` | empty | Trusted, caller-escaped arguments for the installer |
 | `--executable` | auto-detect | Skip executable detection |
 | `--allow-outside-writes` | on | Do not fail on benign outside writes (default since v0.4.6) |
 | `--strict-outside-writes` | off | Fail on any outside write |

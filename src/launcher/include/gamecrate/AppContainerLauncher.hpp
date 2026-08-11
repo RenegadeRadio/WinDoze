@@ -72,6 +72,7 @@ struct LaunchResult {
 class AppContainerLauncher {
 public:
     static LaunchResult Launch(const LaunchOptions& options);
+    static bool HasBalancedQuotes(const std::wstring& arguments);
     static bool ResolveCapability(const std::wstring& name, CapabilitySid& out);
     static bool CreateOrResolveProfile(
         const std::wstring& moniker,

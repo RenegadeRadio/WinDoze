@@ -43,6 +43,17 @@ std::wstring DirectoryFailureMessage(const std::wstring& label, const std::wstri
 }
 
 std::wstring ValidateInstallPath(const std::wstring& path) {
+    const bool hasLongPathPrefix = path.rfind(L"\\\\?\\", 0) == 0;
+    const bool hasInvalidCharacter = std::any_of(path.begin(), path.end(), [&, index = size_t{0}](wchar_t ch) mutable {
+        const bool isLongPathPrefixQuestionMark = hasLongPathPrefix && index == 2;
+        ++index;
+        return ch < 0x20 || ch == L'"' || ch == L'<' || ch == L'>' || ch == L'|' || ch == L'*' ||
+               (ch == L'?' && !isLongPathPrefixQuestionMark);
+    });
+    if (hasInvalidCharacter) {
+        return L"Install directory contains a character that is not allowed in a Windows path.";
+    }
+
     const std::wstring normalized = PathUtils::Normalize(path);
     if (normalized.empty()) {
         return L"Install directory path is invalid.";
@@ -401,6 +412,11 @@ InstallResult InstallManager::Run(const InstallOptions& options) {
     const std::wstring installPathError = ValidateInstallPath(normalized.installDir);
     if (!installPathError.empty()) {
         result.message = installPathError;
+        return result;
+    }
+
+    if (!AppContainerLauncher::HasBalancedQuotes(normalized.installerArgs)) {
+        result.message = L"installer-args has an unterminated quote.";
         return result;
     }
 
