@@ -110,6 +110,10 @@ gamecrate show-install-report --profile my-game
 
 ## Malware-focused workflow
 
+> The install report is a footprint report, not a malware scan. Empty
+> `outsideWrites` and `outsideRegistryChanges` do not prove that an installer is
+> safe. See [MALWARE_SCANNING.md](MALWARE_SCANNING.md).
+
 1. **Never** install untrusted games outside GameCrate first
 2. Run `gamecrate install` with network **off**
 3. Review `install-report.json` — `outsideWrites` should be empty
