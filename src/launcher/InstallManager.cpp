@@ -42,7 +42,18 @@ std::wstring DirectoryFailureMessage(const std::wstring& label, const std::wstri
     return message;
 }
 
+std::wstring StripTrailingSeparators(std::wstring path) {
+    while (!path.empty() && (path.back() == L'\\' || path.back() == L'/')) {
+        path.pop_back();
+    }
+    return path;
+}
+
 std::wstring ValidateInstallPath(const std::wstring& path) {
+    if (path.find(L'"') != std::wstring::npos) {
+        return L"Install directory cannot contain a quotation mark.";
+    }
+
     const std::wstring normalized = PathUtils::Normalize(path);
     if (normalized.empty()) {
         return L"Install directory path is invalid.";
@@ -109,7 +120,7 @@ std::wstring BuildInstallerArguments(const InstallOptions& options) {
     }
 
     // Inno Setup and many Windows installers accept /DIR= to steer the target path.
-    return L"/DIR=\"" + options.installDir + L"\"";
+    return L"/DIR=\"" + StripTrailingSeparators(options.installDir) + L"\"";
 }
 
 bool RegisterProfile(const SandboxProfile& profile, std::wstring& errorMessage) {
@@ -403,6 +414,7 @@ InstallResult InstallManager::Run(const InstallOptions& options) {
         result.message = installPathError;
         return result;
     }
+    normalized.installDir = StripTrailingSeparators(normalized.installDir);
 
     std::wstring directoryError;
     if (!EnsureDirectory(normalized.installDir, &directoryError)) {

@@ -11,6 +11,11 @@ internal static class InstallPathValidator
             return "Install directory is required.";
         }
 
+        if (path.Contains('"'))
+        {
+            return "Install directory cannot contain a quotation mark.";
+        }
+
         string normalized = Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         string lower = normalized.ToLowerInvariant();
 

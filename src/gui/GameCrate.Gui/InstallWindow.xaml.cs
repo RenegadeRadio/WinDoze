@@ -99,6 +99,8 @@ public partial class InstallWindow : Window
             MessageBox.Show(installPathError, "Install folder", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
+        installDir = Path.GetFullPath(installDir)
+            .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 
         _installing = true;
         InstallStartButton.IsEnabled = false;
