@@ -174,9 +174,10 @@ DWORD AppContainerLauncher::LaunchProcess(
     startupInfo.lpAttributeList = attributeList;
 
     PROCESS_INFORMATION procInfo{};
-    std::wstring commandLine = options.arguments.empty()
-        ? L"\"" + options.executable + L"\""
-        : L"\"" + options.executable + L"\" " + options.arguments;
+    std::wstring commandLine = QuoteCommandLineArgument(options.executable);
+    if (!options.arguments.empty()) {
+        commandLine += L" " + options.arguments;
+    }
 
     const wchar_t* workingDirectory =
         options.workingDirectory.empty() ? nullptr : options.workingDirectory.c_str();
@@ -224,9 +225,10 @@ DWORD AppContainerLauncher::LaunchMonitored(
     startupInfo.cb = sizeof(startupInfo);
 
     PROCESS_INFORMATION procInfo{};
-    std::wstring commandLine = options.arguments.empty()
-        ? L"\"" + options.executable + L"\""
-        : L"\"" + options.executable + L"\" " + options.arguments;
+    std::wstring commandLine = QuoteCommandLineArgument(options.executable);
+    if (!options.arguments.empty()) {
+        commandLine += L" " + options.arguments;
+    }
 
     const wchar_t* workingDirectory =
         options.workingDirectory.empty() ? nullptr : options.workingDirectory.c_str();

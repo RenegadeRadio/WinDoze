@@ -109,7 +109,7 @@ std::wstring BuildInstallerArguments(const InstallOptions& options) {
     }
 
     // Inno Setup and many Windows installers accept /DIR= to steer the target path.
-    return L"/DIR=\"" + options.installDir + L"\"";
+    return L"/DIR=" + QuoteCommandLineArgument(options.installDir);
 }
 
 bool RegisterProfile(const SandboxProfile& profile, std::wstring& errorMessage) {
@@ -394,6 +394,10 @@ InstallResult InstallManager::Run(const InstallOptions& options) {
     }
 
     InstallOptions normalized = options;
+    while (normalized.installDir.size() > 3 &&
+           (normalized.installDir.back() == L'\\' || normalized.installDir.back() == L'/')) {
+        normalized.installDir.pop_back();
+    }
     if (normalized.saveDir.empty()) {
         normalized.saveDir = DataPaths::DefaultSaveDir(normalized.id);
     }

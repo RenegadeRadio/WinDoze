@@ -25,4 +25,28 @@ std::wstring FormatWin32Error(DWORD error) {
     return message;
 }
 
+std::wstring QuoteCommandLineArgument(const std::wstring& value) {
+    std::wstring quoted = L"\"";
+    size_t backslashes = 0;
+
+    for (const wchar_t ch : value) {
+        if (ch == L'\\') {
+            ++backslashes;
+            continue;
+        }
+
+        if (ch == L'"') {
+            quoted.append(backslashes * 2 + 1, L'\\');
+        } else {
+            quoted.append(backslashes, L'\\');
+        }
+        backslashes = 0;
+        quoted.push_back(ch);
+    }
+
+    quoted.append(backslashes * 2, L'\\');
+    quoted.push_back(L'"');
+    return quoted;
+}
+
 }  // namespace gamecrate
